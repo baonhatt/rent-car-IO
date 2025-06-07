@@ -10,7 +10,8 @@ import {
   AlertCircle,
   Info,
   Search,
-  ChartArea
+  ChartArea,
+  ArrowUp
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -49,6 +50,7 @@ import { AppDispatch, RootState } from '@/store';
 import { setTasks, addTask, updateTask, deleteTask as deleteTaskAction, fetchTasks, updateToggleComplete } from '@/store/taskSlice';
 import SearchCom from './Search';
 import { Link } from 'react-router-dom';
+import { useScrollToTop } from '@/hooks/useScrollToTop';
 
 // const useDebounce = (text, delay) => {
 //   const [debounce, setDebounce] = useState(text)
@@ -91,6 +93,7 @@ const TaskTable = () => {
   const queryClient = useQueryClient();
   const dispatch = useDispatch<AppDispatch>();
   const tasks = useSelector((state: RootState) => state.tasks.tasks);
+  const { isVisible, scrollToTop } = useScrollToTop();
 
   // Fetch tasks from API
   const { data = [], isLoading, error } = useQuery({
@@ -526,6 +529,17 @@ const TaskTable = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      
+      {/* Add Scroll to Top Button */}
+      {isVisible && (
+        <Button
+          onClick={scrollToTop}
+          className="fixed bottom-4 right-4 rounded-full p-2 shadow-lg"
+          size="icon"
+        >
+          <ArrowUp className="h-4 w-4" />
+        </Button>
+      )}
     </div>
   );
 };
